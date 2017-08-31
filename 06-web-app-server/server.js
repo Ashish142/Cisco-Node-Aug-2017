@@ -1,0 +1,1 @@
+//valid static resource extends -> .html, .css, .js, .png, .jpg, .ico, .xml, .txt, .json
