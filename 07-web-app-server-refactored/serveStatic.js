@@ -7,7 +7,7 @@ function isStatic(resource){
 	return staticExtns.indexOf(resourceExtn) !== -1;
 }
 
-module.exports = function(req, res){
+module.exports = function(req, res, next){
 	var resource = req.urlData.pathname;
 	
 	if (isStatic(resource)){
@@ -26,5 +26,7 @@ module.exports = function(req, res){
 			console.log('[@serveStatic] ending the response stream');
 			res.end();
 		});
+	} else {
+		next();
 	}
 }
