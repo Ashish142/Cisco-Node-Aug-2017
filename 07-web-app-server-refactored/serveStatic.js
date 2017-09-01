@@ -16,6 +16,15 @@ module.exports = function(req, res){
 			res.statusCode = 404;
 			res.end();
 		}
-		fs.createReadStream(resourcePath).pipe(res);
+		//fs.createReadStream(resourcePath).pipe(res);
+		var stream = fs.createReadStream(resourcePath);
+		stream.on('data', function(chunk){
+			console.log('[@serveStatic] data being written to the response');
+			res.write(chunk);
+		});
+		stream.on('end', function(){
+			console.log('[@serveStatic] ending the response stream');
+			res.end();
+		});
 	}
 }
