@@ -12,7 +12,7 @@ module.exports = function(req, res, next){
 		var result = calculator[op](100,200);
 		res.write(result.toString());
 		res.end();
-	else {
+	} else {
 		next();
 	}
 }

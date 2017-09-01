@@ -7,26 +7,19 @@ function isStatic(resource){
 	return staticExtns.indexOf(resourceExtn) !== -1;
 }
 
-module.exports = function(req, res, next){
-	var resource = req.urlData.pathname;
-	
-	if (isStatic(resource)){
-		var resourcePath = path.join(__dirname, resource);
-		if (!fs.existsSync(resourcePath)){
-			res.statusCode = 404;
-			res.end();
+module.exports = function(staticResourcePath){
+	return function(req, res, next){
+		var resource = req.urlData.pathname,
+			resourcePath = path.join(staticResourcePath, resource);	
+				
+		if (isStatic(resource)){
+			if (!fs.existsSync(resourcePath)){
+				res.statusCode = 404;
+				res.end();
+			}
+			fs.createReadStream(resourcePath).pipe(res);
+		} else {
+			next();
 		}
-		//fs.createReadStream(resourcePath).pipe(res);
-		var stream = fs.createReadStream(resourcePath);
-		stream.on('data', function(chunk){
-			console.log('[@serveStatic] data being written to the response');
-			res.write(chunk);
-		});
-		stream.on('end', function(){
-			console.log('[@serveStatic] ending the response stream');
-			res.end();
-		});
-	} else {
-		next();
 	}
 }
