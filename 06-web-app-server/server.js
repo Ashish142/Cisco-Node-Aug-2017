@@ -5,6 +5,14 @@ var http = require('http'),
 	querystring = require('querystring'),
 	calculator = require('./calculator');
 
+/*
+0. logger.js
+1. dataParser.js
+2. serveStatic.js
+3. calculatorHandler.js
+4. notFoundHandler.js
+*/
+
 var staticExtns = ['.html', '.css', '.js', '.jpg', '.png', '.ico', '.xml', '.json'];
 function isStatic(resource){
 	var resourceExtn = path.extname(resource);
@@ -15,6 +23,7 @@ var server = http.createServer(function(req, res){
 	var urlData = url.parse(req.url),
 		queryData = querystring.parse(urlData.query),
 		resource = urlData.pathname;
+	console.log(req.method + '\t' + resource);
 	if (isStatic(resource)){
 		var resourcePath = path.join(__dirname, resource);
 		if (!fs.existsSync(resourcePath)){
